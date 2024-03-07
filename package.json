@@ -4,5 +4,8 @@
   "description": "Application de tiers list",
   "scripts": {
     "build": "node build-script.js"
-  }
+  },
+  "main": "build-script.js",
+  "author": "",
+  "license": "ISC"
 }
