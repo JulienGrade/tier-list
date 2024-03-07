@@ -6,4 +6,4 @@ const configContent = `const config = {
   API_KEY: "${process.env.API_KEY}"
 };`;
 
-fs.writeFileSync(path.join(__dirname, 'config.js'), configContent);
+fs.writeFileSync(path.join(__dirname, 'public','config.js'), configContent);
