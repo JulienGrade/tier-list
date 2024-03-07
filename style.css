@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+body{
+    margin:0;
+    font-family: Comfortaa, Arial, sans-serif;
+}
+.hidden{
+    display: none;
+}
+
+#tierListContainer {
+    width: 100%;
+}
+
+.tier-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.drop-zone {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* 5 colonnes */
+    gap: 1rem; /* espace entre les éléments */
+}
+
+.drop-zone .placeholder {
+    text-align: center;
+    color: white; /* couleur pour le texte "Déposez les films ici" */
+    grid-column: 1 / -1; /* s'étend sur toutes les colonnes */
+}
+
+.draggable {
+    width: 100%; /* pour que les éléments prennent toute la largeur de la colonne */
+    /* autres styles ... */
+}

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tier List de Films</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        mainPurple: '#371F35',
+                        mainPink: '#AF1A4A'
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gradient-to-br from-mainPink from-5% to-mainPurple to-60% text-white min-h-full">
+
+<header>
+    <section class="w-full bg-cover bg-center py-32" style="background-image: url('assets/img/bg-movie.webp');">
+        <div class="container bg-gray-900 bg-opacity-70 rounded-md p-8 mx-auto text-center text-white">
+            <h1 class="text-5xl font-medium mb-6">Ma Tier List de Films</h1>
+            <p class="text-xl mb-12">Il est temps de prendre position et de nous faire ta tier list de films</p>
+        </div>
+    </section>
+    <h1 class="text-xl font-bold text-center my-8"></h1>
+</header>
+<main class="min-h-screen mb-44">
+    <div class="container mx-auto px-4">
+        <div class="search-container w-full md:w-3/4 lg:w-1/4 mb-8 relative text-white">
+            <label for="searchInput"></label>
+            <input type="text" id="searchInput" placeholder="Rechercher un film..." class="placeholder:italic placeholder:text-white shadow appearance-none border bg-mainPurple rounded py-2 px-3 text-white w-full">
+            <div id="autocompleteResults" class="absolute left-0 right-0 bg-mainPurple mt-1 rounded-lg shadow-lg z-10 hidden"></div>
+        </div>
+        <div id="selectionZone" class="grid grid-cols-3 gap-4 mb-8">
+            <h2 class="text-lg font-bold mb-4 col-span-full">Ma sélection de Films</h2>
+            <!-- Les films sélectionnés seront ajoutés ici -->
+        </div>
+        <div id="tierListContainer" class="w-full h-48 text-gray-800">
+            <!-- Les tiers seront générés ici par JavaScript -->
+        </div>
+    </div>
+</main>
+<script src="config.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
