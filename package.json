@@ -1,0 +1,8 @@
+{
+  "name": "tier-list",
+  "version": "1.0.0",
+  "description": "Application de tiers list",
+  "scripts": {
+    "build": "node build-script.js"
+  }
+}
