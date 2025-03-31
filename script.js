@@ -4,6 +4,29 @@ document.addEventListener('DOMContentLoaded', () => {
     addDragAndDropHandlers();
 });
 
+// Permet de gérer le comportement drag and drop sur des zones définies (.drop-zone).
+// Lorsqu’un élément draggable est survolé ou lâché dans l’une de ces zones, il est visuellement mis en surbrillance,
+// puis inséré dans la zone cible au moment du drop
+document.querySelectorAll('.drop-zone').forEach(zone => {
+    zone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        zone.classList.add('dragover');
+    });
+
+    zone.addEventListener('dragleave', () => {
+        zone.classList.remove('dragover');
+    });
+
+    zone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        zone.classList.remove('dragover');
+        const dragging = document.querySelector('.dragging');
+        if (dragging) {
+            zone.appendChild(dragging);
+        }
+    });
+});
+
 // Initialise la liste de catégories en créant des éléments pour chaque catégorie
 const initTierList = () => {
     // Liste des catégories
@@ -34,40 +57,40 @@ const initTierList = () => {
 
 // Configure la fonctionnalité de glisser-déposer pour les éléments déplaçables et les zones de dépôt
 const addDragAndDropHandlers = () => {
-    // Obtient tous les éléments déplaçables et les zones de dépôt
-    const draggables = document.querySelectorAll('.draggable');
-    const dropZones = document.querySelectorAll('.drop-zone');
-    // Ajoute des écouteurs d'événements de début et de fin de glissement à chaque élément déplaçable
-    draggables.forEach(draggable => {
-        draggable.addEventListener('dragstart', e => {
+    document.querySelectorAll('.draggable').forEach(draggable => {
+        draggable.addEventListener('dragstart', (e) => {
             e.target.classList.add('dragging');
             e.dataTransfer.effectAllowed = 'move';
         });
 
-        draggable.addEventListener('dragend', e => {
+        draggable.addEventListener('dragend', (e) => {
             e.target.classList.remove('dragging');
         });
     });
-    // Active la fonctionnalité de dépôt pour chaque zone de dépôt
-    dropZones.forEach(zone => {
-        zone.addEventListener('dragover', e => {
+
+    document.querySelectorAll('.drop-zone').forEach(zone => {
+        zone.addEventListener('dragover', (e) => {
             e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
             const dragging = document.querySelector('.dragging');
-            if (dragging) {
-                e.dataTransfer.dropEffect = 'move';
+            const afterElement = getDragAfterElement(zone, e.clientY);
+            if (afterElement == null) {
+                zone.appendChild(dragging);
+            } else {
+                zone.insertBefore(dragging, afterElement);
             }
         });
 
-        zone.addEventListener('drop', e => {
+        zone.addEventListener('drop', (e) => {
             e.preventDefault();
-            const draggable = document.querySelector('.dragging');
-            if (draggable) {
-                zone.appendChild(draggable);
-                draggable.classList.remove('dragging');
+            const dragging = document.querySelector('.dragging');
+            if (dragging) {
+                dragging.classList.remove('dragging');
             }
         });
     });
 };
+
 
 // Fonction pour obtenir l'élément après lequel l'élément glissé doit être placé`
 const getDragAfterElement = (container, y) => {
@@ -198,58 +221,25 @@ const displayAutocompleteResults = (movies) => {
     movies.forEach(movie => {
         const resultElement = document.createElement('div');
         resultElement.classList.add('flex', 'items-center', 'p-2', 'hover:bg-mainPink', 'cursor-pointer');
-        resultElement.onclick = function() {
+
+        resultElement.addEventListener('click', () => {
             addMovieToSelection(movie);
-            autocompleteResultsElement.classList.add('hidden');
-            searchInput.value = '';
-        };
+            setTimeout(() => {
+                autocompleteResultsElement.classList.add('hidden');
+                searchInput.value = '';
+            }, 300);
+        });
 
         const movieImage = document.createElement('img');
         movieImage.src = `https://image.tmdb.org/t/p/w92${movie.poster_path}`;
         movieImage.alt = `${movie.title} poster`;
         movieImage.classList.add('mr-2');
 
-        const movieDetails = document.createElement('div');
         const movieTitle = document.createElement('span');
         movieTitle.textContent = `${movie.title} (${movie.release_date.split('-')[0]})`;
-        movieDetails.appendChild(movieTitle);
 
         resultElement.appendChild(movieImage);
-        resultElement.appendChild(movieDetails);
+        resultElement.appendChild(movieTitle);
         autocompleteResultsElement.appendChild(resultElement);
     });
-};
-
-// Affichage des résultats de l'autocomplétion
-const displaySearchResults = (movies) => {
-    const searchResultsElement = document.getElementById('searchResults');
-    searchResultsElement.innerHTML = ''; // Nettoie les résultats précédents
-
-    movies.forEach(movie => {
-        const movieElement = document.createElement('div');
-        movieElement.classList.add('search-result', 'p-2', 'bg-gray-100', 'rounded', 'cursor-pointer', 'flex', 'items-center', 'mb-2');
-        movieElement.innerHTML = `
-            <img src="https://image.tmdb.org/t/p/w92${movie.poster_path}" alt="${movie.title} poster" class="mr-2">
-            <div>
-                <span>${movie.title}</span>
-                <span> (${movie.release_date.split('-')[0]})</span>
-            </div>
-        `;
-
-        // Attache un gestionnaire d'événements pour ajouter le film à la sélection sur clic
-        movieElement.addEventListener('click', () => {
-            addMovieToSelection(movie);
-            console.log('click sur liste');
-            clearSearchResults(); // Appelle une fonction pour vider/cacher les résultats de recherche
-        });
-
-        searchResultsElement.appendChild(movieElement);
-    });
-};
-
-// Fonction pour vider les résultats de recherche
-const clearSearchResults = () => {
-    const autocompleteResultsElement = document.getElementById('autocompleteResults');
-    console.log("Clearing search results"); // Ajoutez ceci pour le débogage
-    autocompleteResultsElement.innerHTML = ''; // Vide les résultats de recherche d'autocomplétion
 };

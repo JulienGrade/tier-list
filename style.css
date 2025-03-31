@@ -18,11 +18,7 @@ body{
     flex-direction: column;
 }
 
-.drop-zone {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr); /* 5 colonnes */
-    gap: 1rem; /* espace entre les éléments */
-}
+
 
 .drop-zone .placeholder {
     text-align: center;
@@ -33,4 +29,17 @@ body{
 .draggable {
     width: 100%; /* pour que les éléments prennent toute la largeur de la colonne */
     /* autres styles ... */
+}
+
+.drop-zone {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+    min-height: 5rem;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.drop-zone.dragover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 2px dashed white;
 }
